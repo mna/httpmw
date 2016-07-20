@@ -23,14 +23,36 @@ type PrintfLogger func(string, ...interface{})
 // Log implements Logger for the PrintfLogger function adapter.
 func (fn PrintfLogger) Log(args ...interface{}) error {
 	var buf bytes.Buffer
-	for i := 0; i < len(args)-1; i++ {
+	for i := 0; i < len(args)-1; i += 2 {
 		if i > 0 {
 			buf.WriteByte(' ')
 		}
-		fmt.Fprintf(&buf, "%s=%q", args[i], args[i+1])
+		verb := "%v" //catch-all formatter
+		val := args[i+1]
+
+		// use quoted string formatter if possible
+		switch val.(type) {
+		case string:
+			verb = "%q"
+		case fmt.Stringer:
+			verb = "%q"
+		}
+
+		fmt.Fprintf(&buf, "%s="+verb, args[i], args[i+1])
 	}
-	fn(buf.String())
+	if buf.Len() > 0 {
+		fn(buf.String())
+	}
 	return nil
+}
+
+// StatusHandler is an integer that handles HTTP requests by writing itself
+// as status code. No body is sent.
+type StatusHandler int
+
+// ServeHTTP implements http.Handler for the StatusHandler.
+func (s StatusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(int(s))
 }
 
 // Wrapper defines the Wrap method required to build a middleware-style
