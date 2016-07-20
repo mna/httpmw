@@ -7,7 +7,7 @@ import "net/http"
 // BodyLimit holds the configuration for the middleware handler.
 type BodyLimit struct {
 	// N is the maximum number of bytes that can be read from the request
-	// body before an error is returned.
+	// body before an error is returned. If N is <= 0, no limit is applied.
 	N int64
 }
 
@@ -17,7 +17,9 @@ type BodyLimit struct {
 // io.ReadCloser.
 func (bl *BodyLimit) Wrap(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		r.Body = http.MaxBytesReader(w, r.Body, bl.N)
+		if bl.N > 0 {
+			r.Body = http.MaxBytesReader(w, r.Body, bl.N)
+		}
 		h.ServeHTTP(w, r)
 	})
 }

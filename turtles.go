@@ -1,3 +1,5 @@
+// Package turtles supports creating middleware chains for HTTP
+// handlers.
 package turtles
 
 import "net/http"
