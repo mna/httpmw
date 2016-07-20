@@ -1,3 +1,7 @@
+// Copyright 2016 Martin Angers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // Package remoteip implements a middleware that extracts the effective
 // remote client IP address and sets it on the request's RemoteAddr field.
 package remoteip

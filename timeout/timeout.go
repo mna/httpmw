@@ -1,3 +1,7 @@
+// Copyright 2016 Martin Angers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // Package timeout implements a middleware that returns a 503 error
 // if the request takes too long to execute.
 package timeout

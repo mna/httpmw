@@ -1,3 +1,7 @@
+// Copyright 2016 Martin Angers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // Package basicauth implements a basic authentication middleware.
 package basicauth
 
@@ -5,6 +9,9 @@ import (
 	"fmt"
 	"net/http"
 )
+
+// DefaultRealm is the default realm for the basic authentication.
+var DefaultRealm = "Authorization Required"
 
 // BasicAuth holds the configuration for the basic authentication
 // middleware.
@@ -37,6 +44,11 @@ func (ba *BasicAuth) Wrap(h http.Handler) http.Handler {
 			return u == ba.User && p == ba.Password, nil
 		}
 	}
+	realm := ba.Realm
+	if realm == "" {
+		realm = DefaultRealm
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		u, p, ok := r.BasicAuth()
 		if ok {
@@ -48,7 +60,7 @@ func (ba *BasicAuth) Wrap(h http.Handler) http.Handler {
 			ok = success
 		}
 		if !ok {
-			w.Header().Set("WWW-Authenticate", fmt.Sprintf("Basic realm=%q", ba.Realm))
+			w.Header().Set("WWW-Authenticate", fmt.Sprintf("Basic realm=%q", realm))
 			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 			return
 		}

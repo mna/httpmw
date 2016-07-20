@@ -1,3 +1,7 @@
+// Copyright 2016 Martin Angers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // Package cleanpath implements a middleware that cleans the requested
 // path to a canonical form. It redirects to the clean path if the
 // requested path is not the canonical one. Some request multiplexers
