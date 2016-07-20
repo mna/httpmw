@@ -4,6 +4,13 @@ package turtles
 
 import "net/http"
 
+// Logger defines the Log method that is used to log structured
+// data, in tuples of alternating keys/values. The go-kit logger
+// satisfies this interface (github.com/go-kit/kit/log).
+type Logger interface {
+	Log(...interface{}) error
+}
+
 // Wrapper defines the Wrap method required to build a middleware-style
 // chain of calls.
 type Wrapper interface {

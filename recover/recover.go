@@ -5,20 +5,15 @@ package recover
 import (
 	"net/http"
 	"runtime"
-)
 
-// Logger defines the Log method that is used to log structured
-// data, in tuples of alternating keys/values. The go-kit logger
-// satisfies this interface (github.com/go-kit/kit/log).
-type Logger interface {
-	Log(...interface{}) error
-}
+	"github.com/PuerkitoBio/turtles"
+)
 
 // Recover holds the configuration for the middleware to recover
 // from panics.
 type Recover struct {
 	// Logger is used to log the panic's details, if non-nil.
-	Logger Logger
+	Logger turtles.Logger
 
 	// StackTrace indicates if the stack trace should be logged
 	// in addition to the panic.
