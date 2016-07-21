@@ -34,7 +34,8 @@ type RequestID struct {
 var testForceRandErr bool
 
 // Wrap returns a handler that sets a random request ID header before calling
-// the handler h.
+// the handler h. The request ID is also set on the response, so the whole
+// round-trip can be correlated with the client logs too.
 func (rid *RequestID) Wrap(h http.Handler) http.Handler {
 	header := rid.Header
 	if header == "" {
@@ -51,8 +52,10 @@ func (rid *RequestID) Wrap(h http.Handler) http.Handler {
 		if id := r.Header.Get(header); id == "" || force {
 			// the number of random bytes is Len / 2 (since we then hex-encode the bytes)
 			b := make([]byte, hex.DecodedLen(n))
+
+			var val string
 			if _, err := rand.Read(b); err == nil && !testForceRandErr {
-				r.Header.Set(header, hex.EncodeToString(b))
+				val = hex.EncodeToString(b)
 			} else {
 				// fallback on timestamp
 				ts := time.Now().UnixNano()
@@ -61,8 +64,10 @@ func (rid *RequestID) Wrap(h http.Handler) http.Handler {
 					// take the last n bytes, more randomness
 					v = v[len(v)-n:]
 				}
-				r.Header.Set(header, v)
+				val = v
 			}
+			r.Header.Set(header, val)
+			w.Header().Set(header, val)
 		}
 		h.ServeHTTP(w, r)
 	})
