@@ -50,7 +50,8 @@ func (cp *CleanPath) Wrap(h http.Handler) http.Handler {
 			if p := cleanPath(r.URL.Path, mode); p != r.URL.Path {
 				url := *r.URL
 				url.Path = p
-				h = http.RedirectHandler(url.String(), http.StatusMovedPermanently)
+				http.Redirect(w, r, url.String(), http.StatusMovedPermanently)
+				return
 			}
 		}
 		h.ServeHTTP(w, r)
