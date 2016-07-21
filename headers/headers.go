@@ -14,23 +14,23 @@ import "net/http"
 type Headers http.Header
 
 // Add adds the value v to the header k.
-func (h Headers) Add(k, v string) {
-	http.Header(h).Add(k, v)
+func (hd Headers) Add(k, v string) {
+	http.Header(hd).Add(k, v)
 }
 
 // Set sets the value v to the header k, replacing any existing value.
-func (h Headers) Set(k, v string) {
-	http.Header(h).Set(k, v)
+func (hd Headers) Set(k, v string) {
+	http.Header(hd).Set(k, v)
 }
 
 // Get returns the first value of the header k.
-func (h Headers) Get(k string) string {
-	return http.Header(h).Get(k)
+func (hd Headers) Get(k string) string {
+	return http.Header(hd).Get(k)
 }
 
 // Del removes the header k.
-func (h Headers) Del(k string) {
-	http.Header(h).Del(k)
+func (hd Headers) Del(k string) {
+	http.Header(hd).Del(k)
 }
 
 // Wrap returns a handler that adds the headers to the response's Header.
