@@ -15,7 +15,8 @@ type StripPrefix struct {
 }
 
 // Wrap returns a handler that strips the prefix from the request URL's
-// Path. It calls http.StripPrefix to create the returned handler.
+// Path. It calls http.StripPrefix to create the returned handler. If the
+// request's Path doesn't start with the prefix, it responds with a 404.
 func (sp *StripPrefix) Wrap(h http.Handler) http.Handler {
 	return http.StripPrefix(sp.Prefix, h)
 }
