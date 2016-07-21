@@ -75,3 +75,12 @@ func TestWrap(t *testing.T) {
 		assert.Equal(t, c.body, rw.Body.String(), "%d: body", i)
 	}
 }
+
+func TestStatusHandler(t *testing.T) {
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest("", "/", nil)
+
+	h := StatusHandler(204)
+	h.ServeHTTP(w, r)
+	assert.Equal(t, 204, w.Code, "status")
+}
