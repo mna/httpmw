@@ -125,8 +125,10 @@ func (lr *LogRequest) Wrap(h http.Handler) http.Handler {
 			vals["body_bytes_sent"] = strconv.Itoa(ww.Size())
 		}
 
+		args := make([]interface{}, 0, len(fields)*2)
 		for _, f := range fields {
-			lr.Logger.Log(f, vals[f])
+			args = append(args, f, vals[f])
 		}
+		lr.Logger.Log(args...)
 	})
 }

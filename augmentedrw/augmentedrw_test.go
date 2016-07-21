@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWrap(t *testing.T) {
+func TestAugmentedRW(t *testing.T) {
 	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ww, ok := w.(interface {
 			Size() int

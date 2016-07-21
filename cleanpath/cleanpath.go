@@ -83,7 +83,7 @@ func cleanPath(p string, mode TrailingSlashMode) string {
 			np += "/"
 		}
 	case Remove:
-		if np[len(np)-1] == '/' {
+		if len(np) > 1 && np[len(np)-1] == '/' {
 			np = np[:len(np)-1]
 		}
 	}
