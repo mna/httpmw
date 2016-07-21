@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,7 +25,7 @@ func TestAugmentedRW(t *testing.T) {
 		assert.Equal(t, 2, ww.Size(), "size")
 	})
 
-	hh := turtles.Wrap(h, turtles.WrapperFunc(Wrap))
+	hh := httpmw.Wrap(h, httpmw.WrapperFunc(Wrap))
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest("", "/", nil)
 	hh.ServeHTTP(w, r)

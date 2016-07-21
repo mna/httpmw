@@ -9,13 +9,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRemoteIP(t *testing.T) {
 	var rip RemoteIP
-	h := turtles.Wrap(turtles.StatusHandler(200), &rip)
+	h := httpmw.Wrap(httpmw.StatusHandler(200), &rip)
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest("", "/", nil)
 

@@ -12,7 +12,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,7 +29,7 @@ func TestBodyLimit(t *testing.T) {
 	}
 	for i, c := range cases {
 		bl := &BodyLimit{N: c.N}
-		h := turtles.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h := httpmw.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			_, err := io.Copy(ioutil.Discard, r.Body)
 			if c.wantErr {
 				if assert.Error(t, err, "%d: error", i) {

@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 )
 
 var allFields = []string{
@@ -34,7 +34,7 @@ var allFields = []string{
 // LogRequest holds the configuration for the LogRequest middleware.
 type LogRequest struct {
 	// Logger is the logger to use to log the requests.
-	Logger turtles.Logger
+	Logger httpmw.Logger
 
 	// RequestIDHeader is the name of the header that contains the request
 	// ID. Defaults to X-Request-Id.

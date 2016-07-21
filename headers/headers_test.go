@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +19,7 @@ func TestHeaders(t *testing.T) {
 	head.Add("B", "b")
 	head.Add("C", "c")
 
-	h := turtles.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	h := httpmw.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("D", "d")
 		w.Header().Add("A", "z")
 		w.Header().Set("B", "x")

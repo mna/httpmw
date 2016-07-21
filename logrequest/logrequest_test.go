@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/go-kit/kit/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +19,7 @@ func TestLogRequest(t *testing.T) {
 	var buf bytes.Buffer
 	l := log.NewLogfmtLogger(&buf)
 	lr := &LogRequest{Logger: l, DurationFormat: "%.5f", Fields: []string{"duration", "method", "path"}}
-	h := turtles.Wrap(turtles.StatusHandler(200), lr)
+	h := httpmw.Wrap(httpmw.StatusHandler(200), lr)
 
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest("", "/", nil)

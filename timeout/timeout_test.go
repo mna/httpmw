@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +27,7 @@ func TestTimeout(t *testing.T) {
 	for i, c := range cases {
 		dur, _ := time.ParseDuration(c.timeout)
 		to := &Timeout{Duration: dur}
-		h := turtles.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		h := httpmw.Wrap(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			dur, _ := time.ParseDuration(c.sleep)
 			time.Sleep(dur)
 			w.WriteHeader(200)

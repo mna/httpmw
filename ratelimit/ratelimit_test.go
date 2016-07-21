@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRateLimit(t *testing.T) {
 	rl := &RateLimit{Requests: 2, Interval: 100 * time.Millisecond, MaxWait: 10 * time.Millisecond}
-	h := turtles.Wrap(turtles.StatusHandler(200), rl)
+	h := httpmw.Wrap(httpmw.StatusHandler(200), rl)
 
 	for _, want := range []int{200, 200, 429} {
 		w := httptest.NewRecorder()

@@ -11,7 +11,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,7 +43,7 @@ func TestBasicAuth(t *testing.T) {
 		}}, user: "a", pwd: "b", want: 401},
 	}
 	for i, c := range cases {
-		h := turtles.Wrap(turtles.StatusHandler(200), c.conf)
+		h := httpmw.Wrap(httpmw.StatusHandler(200), c.conf)
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest("", "/", nil)
 		r.SetBasicAuth(c.user, c.pwd)

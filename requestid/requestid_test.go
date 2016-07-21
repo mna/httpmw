@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,7 +31,7 @@ func TestRequestID(t *testing.T) {
 			key = c.rid.Header
 		}
 
-		h := turtles.Wrap(turtles.StatusHandler(200), c.rid)
+		h := httpmw.Wrap(httpmw.StatusHandler(200), c.rid)
 		w := httptest.NewRecorder()
 		r := httptest.NewRequest("", "/", nil)
 		if c.preset != "" {

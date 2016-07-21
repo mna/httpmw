@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func TestRecover(t *testing.T) {
 	})
 
 	var rec Recover
-	h := turtles.Wrap(fn, &rec)
+	h := httpmw.Wrap(fn, &rec)
 	w := httptest.NewRecorder()
 	r, _ := http.NewRequest("", "/", nil)
 

@@ -10,14 +10,14 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 )
 
 // Recover holds the configuration for the middleware to recover
 // from panics.
 type Recover struct {
 	// Logger is used to log the panic's details, if non-nil.
-	Logger turtles.Logger
+	Logger httpmw.Logger
 
 	// StackTrace indicates if the stack trace should be logged
 	// in addition to the panic.

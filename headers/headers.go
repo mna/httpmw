@@ -8,7 +8,7 @@ package headers
 
 import "net/http"
 
-// Headers is an http.Header map that implements the turtles.Wrapper
+// Headers is an http.Header map that implements the httpmw.Wrapper
 // interface so that the headers are added to each request using the
 // middleware.
 type Headers http.Header

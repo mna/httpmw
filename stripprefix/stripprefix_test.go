@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/PuerkitoBio/turtles"
+	"github.com/PuerkitoBio/httpmw"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,7 +26,7 @@ func TestStripPrefix(t *testing.T) {
 
 	for i, c := range cases {
 		sp := &StripPrefix{c.prefix}
-		h := turtles.Wrap(turtles.StatusHandler(200), sp)
+		h := httpmw.Wrap(httpmw.StatusHandler(200), sp)
 		w := httptest.NewRecorder()
 		r := httptest.NewRequest("", c.path, nil)
 
