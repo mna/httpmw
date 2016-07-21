@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package cors implements a CORS middleware and handler for OPTIONS requests.
+// Package cors implements a CORS middleware and a handler
+// for OPTIONS requests.
 package cors
 
 import (
