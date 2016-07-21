@@ -10,3 +10,6 @@ h := httpmw.Wrap(h, httpmw.WrapperFunc(wrapper))
 // h is CSRF-protected, use csrf.Token(r) to retrieve the token on user login.
 ```
 
+## GZIP
+
+Using http://godoc.org/github.com/NYTimes/gziphandler.
