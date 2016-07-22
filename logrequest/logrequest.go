@@ -25,6 +25,7 @@ var allFields = []string{
 	"origin",
 	"path",
 	"proto",
+	"query",
 	"remote_addr",
 	"start",
 	"status",
@@ -63,6 +64,7 @@ type LogRequest struct {
 	//     origin: value of the Origin request header
 	//     path: path section of the request URL
 	//     proto: protocol and version (e.g. HTTP/1.1)
+	//     query: query string section of the request URL
 	//     remote_addr: address of the client
 	//     start: date and time of the start of the request (UTC)
 	//     status: status code of the response
@@ -116,6 +118,7 @@ func (lr *LogRequest) Wrap(h http.Handler) http.Handler {
 			"body_bytes_received": strconv.FormatInt(r.ContentLength, 10),
 			"user_agent":          r.UserAgent(),
 			"remote_addr":         r.RemoteAddr,
+			"query":               r.URL.RawQuery,
 		}
 		if ww, ok := w.(interface {
 			Status() int
