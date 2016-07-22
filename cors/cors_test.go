@@ -33,7 +33,7 @@ func TestCORSWrap(t *testing.T) {
 		opts := &CORS{
 			ExposeHeaders:    []string{"X-Csrf-Token"},
 			AllowCredentials: true,
-			AllowedOrigins:   allowedOrigins,
+			AllowOrigins:     allowedOrigins,
 		}
 
 		fn := func(w http.ResponseWriter, r *http.Request) {
@@ -81,8 +81,8 @@ func TestCORSHandler(t *testing.T) {
 			AllowCredentials: true,
 			ExposeHeaders:    []string{"X-Csrf-Token"},
 			MaxAge:           time.Hour,
-			AllowedOrigins:   allowedOrigins,
-			AllowedMethods:   []string{"GET", "POST"},
+			AllowOrigins:     allowedOrigins,
+			AllowMethods:     []string{"GET", "POST"},
 		}
 
 		rr := httptest.NewRecorder()

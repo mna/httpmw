@@ -29,23 +29,22 @@ type CORS struct {
 	// ExposeHeaders is a list of headers exposed to the client by the CORS endpoint.
 	ExposeHeaders []string
 
-	// AllowedOrigins is a list of whitelisted, allowed origins. It should
+	// AllowOrigins is a list of whitelisted, allowed origins. It should
 	// include the scheme and port, as required. The value is lowercased
 	// and compared to the Origin header received from the client. The
 	// special value "*" can be used to allow any origin.
 	//
-	// Ignored if AllowedOriginsFunc is set.
-	AllowedOrigins []string
+	// Ignored if AllowOriginsFunc is set.
+	AllowOrigins []string
 
-	// AllowedOriginsFunc is a function that is called with the Origin header
+	// AllowOriginsFunc is a function that is called with the Origin header
 	// received from the client. The origin is allowed if it returns true.
-	// If this field is non-nil, AllowedOrigins is ignored and this function
+	// If this field is non-nil, AllowOrigins is ignored and this function
 	// is called for each request.
-	AllowedOriginsFunc func(string) bool
+	AllowOriginsFunc func(string) bool
 
-	// AllowedMethods indicates the list of allowed HTTP methods. The
-	// OPTIONS method should not be included.
-	AllowedMethods []string
+	// AllowMethods indicates the list of allowed HTTP methods.
+	AllowMethods []string
 }
 
 // ServeHTTP is the handler for CORS OPTIONS preflight requests.
@@ -101,11 +100,11 @@ func setCORSHeaders(w http.ResponseWriter, r *http.Request, c *CORS) error {
 		return nil
 	}
 
-	if c.AllowedOriginsFunc != nil {
-		if !c.AllowedOriginsFunc(ori) {
+	if c.AllowOriginsFunc != nil {
+		if !c.AllowOriginsFunc(ori) {
 			return errors.New("invalid CORS origin: " + ori)
 		}
-	} else if !isIn(c.AllowedOrigins, ori) {
+	} else if !isIn(c.AllowOrigins, ori) {
 		return errors.New("invalid CORS origin: " + ori)
 	}
 
@@ -121,7 +120,7 @@ func setCORSHeaders(w http.ResponseWriter, r *http.Request, c *CORS) error {
 
 	// other CORS headers are only for preflight requests (OPTIONS)
 	if r.Method == "OPTIONS" {
-		w.Header().Set("Access-Control-Allow-Methods", strings.Join(c.AllowedMethods, ", "))
+		w.Header().Set("Access-Control-Allow-Methods", strings.Join(c.AllowMethods, ", "))
 		if c.MaxAge > 0 {
 			w.Header().Set("Access-Control-Max-Age", strconv.Itoa(int(c.MaxAge.Seconds())))
 		}
