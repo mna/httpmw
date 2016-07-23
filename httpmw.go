@@ -57,6 +57,7 @@ type StatusHandler int
 // ServeHTTP implements http.Handler for the StatusHandler.
 func (s StatusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(int(s))
+	w.Write(nil)
 }
 
 // Wrapper defines the Wrap method required to build a middleware-style
