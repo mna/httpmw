@@ -5,6 +5,7 @@
 package ratelimit
 
 import (
+	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
@@ -19,7 +20,7 @@ func TestRateLimit(t *testing.T) {
 
 	for _, want := range []int{200, 200, 429} {
 		w := httptest.NewRecorder()
-		r := httptest.NewRequest("", "/", nil)
+		r, _ := http.NewRequest("", "/", nil)
 		h.ServeHTTP(w, r)
 		assert.Equal(t, want, w.Code, "status")
 	}
@@ -28,7 +29,7 @@ func TestRateLimit(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 	for _, want := range []int{200, 200, 429} {
 		w := httptest.NewRecorder()
-		r := httptest.NewRequest("", "/", nil)
+		r, _ := http.NewRequest("", "/", nil)
 		h.ServeHTTP(w, r)
 		assert.Equal(t, want, w.Code, "status")
 	}

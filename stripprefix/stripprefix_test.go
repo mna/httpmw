@@ -5,6 +5,7 @@
 package stripprefix
 
 import (
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -28,7 +29,7 @@ func TestStripPrefix(t *testing.T) {
 		sp := &StripPrefix{c.prefix}
 		h := httpmw.Wrap(httpmw.StatusHandler(200), sp)
 		w := httptest.NewRecorder()
-		r := httptest.NewRequest("", c.path, nil)
+		r, _ := http.NewRequest("", c.path, nil)
 
 		h.ServeHTTP(w, r)
 		assert.Equal(t, c.code, w.Code, "%d: status", i)

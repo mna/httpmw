@@ -5,6 +5,7 @@
 package requestid
 
 import (
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -33,7 +34,7 @@ func TestRequestID(t *testing.T) {
 
 		h := httpmw.Wrap(httpmw.StatusHandler(200), c.rid)
 		w := httptest.NewRecorder()
-		r := httptest.NewRequest("", "/", nil)
+		r, _ := http.NewRequest("", "/", nil)
 		if c.preset != "" {
 			r.Header.Set(key, c.preset)
 		}

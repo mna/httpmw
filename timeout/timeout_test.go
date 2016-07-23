@@ -33,7 +33,7 @@ func TestTimeout(t *testing.T) {
 			w.WriteHeader(200)
 		}), to)
 		w := httptest.NewRecorder()
-		r := httptest.NewRequest("", "/", nil)
+		r, _ := http.NewRequest("", "/", nil)
 		h.ServeHTTP(w, r)
 
 		assert.Equal(t, c.want, w.Code, "%d: status", i)
