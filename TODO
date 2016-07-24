@@ -1,0 +1,2 @@
+- Add support for custom error handling (e.g. return json, or jsonapi-formatted errors)
+
