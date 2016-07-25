@@ -10,7 +10,9 @@ import "net/http"
 
 // Headers is an http.Header map that implements the httpmw.Wrapper
 // interface so that the headers are added to each request using the
-// middleware.
+// middleware. By default the header values are set (replace any existing
+// value), but the behaviour can be controlled by prepending a "+" to
+// the header name (add the value) or a "-" (remove this header).
 type Headers http.Header
 
 // Add adds the value v to the header k.
@@ -38,9 +40,22 @@ func (hd Headers) Del(k string) {
 // appended.
 func (hd Headers) Wrap(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		resHd := w.Header()
 		for k, v := range hd {
-			for _, vv := range v {
-				w.Header().Add(k, vv)
+			start := byte(' ')
+			if len(k) > 0 {
+				start = k[0]
+			}
+			switch start {
+			case '+':
+				k := k[1:]
+				for _, vv := range v {
+					resHd.Add(k, vv)
+				}
+			case '-':
+				resHd.Del(k[1:])
+			default:
+				resHd[k] = v
 			}
 		}
 		h.ServeHTTP(w, r)

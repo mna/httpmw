@@ -13,6 +13,30 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestHeadersPrefix(t *testing.T) {
+	head := make(Headers)
+	head.Add("A", "a")
+	head.Add("A", "aa")
+	head.Add("+B", "b")
+	head.Add("-C", "")
+	head.Add("+D", "d")
+
+	w := httptest.NewRecorder()
+	r, _ := http.NewRequest("", "/", nil)
+	h := head.Wrap(httpmw.StatusHandler(204))
+	w.Header().Set("C", "c")
+	w.Header().Set("A", "z")
+	w.Header().Set("B", "x")
+
+	h.ServeHTTP(w, r)
+	assert.Equal(t, 204, w.Code, "status")
+	assert.Equal(t, http.Header{
+		"A": {"a", "aa"},
+		"B": {"x", "b"},
+		"D": {"d"},
+	}, w.Header(), "headers")
+}
+
 func TestHeaders(t *testing.T) {
 	head := make(Headers)
 	head.Add("A", "a")
