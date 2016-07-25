@@ -1,2 +1,1 @@
 - Add support for custom error handling (e.g. return json, or jsonapi-formatted errors)
-- headers: add support to replace and remove static headers (maybe via `+` and `-` prefixes)
