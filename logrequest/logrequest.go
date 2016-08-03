@@ -135,6 +135,6 @@ func (lr *LogRequest) Wrap(h http.Handler) http.Handler {
 		for _, f := range fields {
 			args = append(args, f, vals[f])
 		}
-		lr.Logger.Log(args...)
+		log.Log(args...)
 	})
 }
