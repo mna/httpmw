@@ -20,13 +20,13 @@ var allFields = []string{
 	"duration",
 	"end",
 	"host",
-	"id",
 	"method",
 	"origin",
 	"path",
 	"proto",
 	"query",
 	"remote_addr",
+	"request_id",
 	"start",
 	"status",
 	"uri",
@@ -59,13 +59,13 @@ type LogRequest struct {
 	//     duration: duration of the request
 	//     end: date and time of the end of the request (UTC)
 	//     host: host (and possibly port) of the request
-	//     id: request ID
 	//     method: method of the request (e.g. GET)
 	//     origin: value of the Origin request header
 	//     path: path section of the request URL
 	//     proto: protocol and version (e.g. HTTP/1.1)
 	//     query: query string section of the request URL
 	//     remote_addr: address of the client
+	//     request_id: request ID
 	//     start: date and time of the start of the request (UTC)
 	//     status: status code of the response
 	//     uri: raw request URI
@@ -112,7 +112,7 @@ func (lr *LogRequest) Wrap(h http.Handler) http.Handler {
 			"host":                r.Host,
 			"method":              r.Method,
 			"uri":                 r.RequestURI,
-			"id":                  r.Header.Get(hd),
+			"request_id":          r.Header.Get(hd),
 			"path":                r.URL.Path,
 			"origin":              r.Header.Get("Origin"),
 			"body_bytes_received": strconv.FormatInt(r.ContentLength, 10),
