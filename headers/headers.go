@@ -36,8 +36,6 @@ func (hd Headers) Del(k string) {
 }
 
 // Wrap returns a handler that adds the headers to the response's Header.
-// Values are added, so that if a header key already exists, values are
-// appended.
 func (hd Headers) Wrap(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resHd := w.Header()
