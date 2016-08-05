@@ -15,7 +15,7 @@ import (
 )
 
 func TestRateLimit(t *testing.T) {
-	rl := &RateLimit{Requests: 2, Interval: 100 * time.Millisecond, MaxWait: 10 * time.Millisecond}
+	rl := &RateLimit{RPS: 2, Capacity: 2, MaxWait: 10 * time.Millisecond}
 	h := httpmw.Wrap(httpmw.StatusHandler(200), rl)
 
 	for _, want := range []int{200, 200, 429} {
@@ -26,7 +26,7 @@ func TestRateLimit(t *testing.T) {
 	}
 
 	// wait the interval, should be good for 2 more
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(time.Second)
 	for _, want := range []int{200, 200, 429} {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest("", "/", nil)

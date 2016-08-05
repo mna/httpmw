@@ -17,29 +17,30 @@ import (
 // RateLimit holds the configuration for the RateLimit middleware handler.
 // For example, to allow 100 requests per second and a wait time of 50ms
 // to wait for an available token for the request to be allowed, set
-// Requests=100, Interval=1s, MaxWait=50ms.
+// RPS=100, MaxWait=50ms.
 type RateLimit struct {
-	// Requests is the maximum number of requests to allow per Interval.
-	Requests int64
+	// RPS is the number of requests per seconds. Tokens will fill at an
+	// interval that closely respects that RPS value.
+	RPS int64
 
-	// Interval is the time interval during which the specified number of
-	// Requests are allowed.
-	Interval time.Duration
+	// Capacity is the maximum number of tokens that can be available in
+	// the bucket. The bucket starts at full capacity.
+	Capacity int64
 
 	// MaxWait is the maximum time to wait for an available token for a
 	// request to be allowed. If no token is available, the request is
-	// denied and a status code 429 is returned.
+	// denied without waiting and a status code 429 is returned.
 	MaxWait time.Duration
 }
 
-// Wrap returns a handler that allows only the configured number of requests
-// per specified time interval. The wrapped handler h is called only if the
-// request is allowed by the rate limiter, otherwise a status code 429 is returned.
+// Wrap returns a handler that allows only the configured number of requests.
+// The wrapped handler h is called only if the request is allowed by the rate
+// limiter, otherwise a status code 429 is returned.
 //
 // Each call to Wrap creates a new, distinct rate limiter bucket that controls
 // access to h.
 func (rl *RateLimit) Wrap(h http.Handler) http.Handler {
-	bucket := ratelimit.NewBucketWithQuantum(rl.Interval, rl.Requests, rl.Requests)
+	bucket := ratelimit.NewBucketWithRate(float64(rl.RPS), rl.Capacity)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !bucket.WaitMaxDuration(1, rl.MaxWait) {
 			http.Error(w, http.StatusText(http.StatusTooManyRequests), http.StatusTooManyRequests)
