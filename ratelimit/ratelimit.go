@@ -24,7 +24,8 @@ type RateLimit struct {
 	RPS int64
 
 	// Capacity is the maximum number of tokens that can be available in
-	// the bucket. The bucket starts at full capacity.
+	// the bucket. The bucket starts at full capacity. If the capacity is
+	// <= 0, it is set to the RPS.
 	Capacity int64
 
 	// MaxWait is the maximum time to wait for an available token for a
@@ -40,7 +41,11 @@ type RateLimit struct {
 // Each call to Wrap creates a new, distinct rate limiter bucket that controls
 // access to h.
 func (rl *RateLimit) Wrap(h http.Handler) http.Handler {
-	bucket := ratelimit.NewBucketWithRate(float64(rl.RPS), rl.Capacity)
+	cap := rl.Capacity
+	if rl.Capacity <= 0 {
+		cap = rl.RPS
+	}
+	bucket := ratelimit.NewBucketWithRate(float64(rl.RPS), cap)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !bucket.WaitMaxDuration(1, rl.MaxWait) {
 			http.Error(w, http.StatusText(http.StatusTooManyRequests), http.StatusTooManyRequests)
